@@ -1,0 +1,12 @@
+//get all docs fron collention
+app.get("/", function(req, res){
+	//res.render("template", {name: JSON.stringify(result)});
+	mongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+    db.collection("userData").findOne({"email":"@.com"}, function(err, result) {
+    if (err) throw err;
+    res.render("template", {name: result});
+    db.close();
+    });
+	});
+});
