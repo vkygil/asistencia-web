@@ -1,0 +1,49 @@
+<div class="classTab">
+  <button class="tablinks" onclick="openCity(event, 'lunes')">Lunes</button>
+  <button class="tablinks" onclick="openCity(event, 'martes')">Martes</button>
+  <button class="tablinks" onclick="openCity(event, 'miercoles')">Miercoles</button>
+  <button class="tablinks" onclick="openCity(event, 'jueves')">Jueves</button>
+  <button class="tablinks" onclick="openCity(event, 'viernes')">Viernes</button>
+  <button class="tablinks" onclick="openCity(event, 'sabado')">Sabado</button>
+  <button class="tablinks" onclick="openCity(event, 'domingo')">Domingo</button>
+</div><br>
+
+<hr>
+<div class="tab">
+  <button class="tablinks" onclick="openCity(event, 'lunes')">Lunes</button>
+  <button class="tablinks" onclick="openCity(event, 'martes')">Martes</button>
+  <button class="tablinks" onclick="openCity(event, 'miercoles')">Miercoles</button>
+  <button class="tablinks" onclick="openCity(event, 'jueves')">Jueves</button>
+  <button class="tablinks" onclick="openCity(event, 'viernes')">Viernes</button>
+  <button class="tablinks" onclick="openCity(event, 'sabado')">Sabado</button>
+  <button class="tablinks" onclick="openCity(event, 'domingo')">Domingo</button>
+</div><br>
+
+<div id="lunes">
+<div id="divLun">
+<input type="text" name="lun1a" placeholder="ej.: 8:00"> -
+<input type="text" name="lun1b" placeholder="ej.: 8:45"><br><br> <span >a</span>
+</div>
+<script>
+	var indexLun=1;
+	function addFields(){
+	indexLun = indexLun+1;
+	var elementLun = document.createElement("div");
+	elementLun.innerHTML = '<span>'+indexLun+'a hora: </span><input type="text" name="lun'+indexLun+'a" placeholder="ej.: 8:00"> -<input type="text" name="lun'+indexLun+'b" placeholder="ej.: 8:45"><br><br>'
+	document.getElementById("divLun").appendChild(elementLun)
+	}
+</script>
+<input type="button" value="Add hour" class="btn btn-default" onclick="addFields()"><br><br>
+</div>
+
+
+
+
+<form method="post" action="/users/login">
+<input type="button" value="save" class="btn btn-default">
+</form>
+
+<hr>
+
+<span>All class names:</span>
+<textarea> </textarea>

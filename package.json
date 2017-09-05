@@ -1,0 +1,30 @@
+{
+  "name": "asistencia",
+  "version": "1.0.0",
+  "description": "simple asistencia",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "bcryptjs": "*",
+    "body-parser": "*",
+    "connect-flash": "*",
+    "cookie-parser": "^1.4.1",
+    "express": "*",
+    "express-handlebars": "*",
+    "express-messages": "*",
+    "express-session": "*",
+    "express-validator": "*",
+    "moment": "^2.18.1",
+    "mongodb": "^2.2.31",
+    "mongoose": "*",
+    "nodemailer": "^4.1.0",
+    "passport": "*",
+    "passport-http": "*",
+    "passport-local": "*",
+    "pug": "^2.0.0-rc.3"
+  },
+  "author": "ssingh",
+  "license": "ISC"
+}
