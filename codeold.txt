@@ -10,3 +10,48 @@ app.get("/", function(req, res){
     });
 	});
 });
+--
+
+$.each(["1 ESO A", "1 ESO B"], function( index, vvalue ) {
+  $(":checkbox[value=vvalue]").prop("checked","true");
+});
+
+
+var a = "{{tClasses}}".split(",");
+for (i = 0; i < a.length; i++) { 
+   document.getElementById(a[i]).checked = true;
+}
+
+<p>Your classes:</p>
+{{#each tClasses}}
+	  {{this}}<span>, </span>
+{{/each}}
+
+for(ii=0; ii<5; ii++){
+for(iii=0; iii<time[ii].time.length; iii++){
+	time[ii].time[iii][0] = parseInt(time[ii].time[iii][0]);
+	time[ii].time[iii][1] = parseInt(time[ii].time[iii][1]);
+}
+}
+
+for(iii=0; iii<time[d].time.length; iii++){
+				if(time[d].time[iii][0]<cTime && cTime<[d].time[iii][1]){
+					res.send(time[d].time[iii][2])
+				} else{
+					res.send(""+d+" "+h+" "+m)
+			}
+}
+
+
+var cn1= Math.round(result.classes.length/2), cn2=result.classes.length-cn1;
+var c1 = result.classes.slice(0, cn1);
+var c2 = result.classes.slice(-Math.abs(cn2));
+
+	mongoClient.connect("mongodb://localhost/"+2017, function(err, db) {
+    if (err) throw err;
+    db.collection("eso1").findOne({"day":"1"}, function(err, result) {
+    if (err) throw err;
+    res.send(result);
+    db.close();
+    });
+	});

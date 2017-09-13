@@ -20,6 +20,12 @@ var UserSchema = mongoose.Schema({
 	},
 	role: {
 		type: String
+	},
+	time: {
+		type: Array
+	},
+	classes: {
+		type: Array
 	}
 }, {collection:"userData"});
 var User = module.exports = mongoose.model('User', UserSchema);

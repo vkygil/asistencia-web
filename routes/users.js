@@ -10,6 +10,10 @@ var url = "mongodb://localhost/staticData";
 var mongoose = require("mongoose");
 mongoose.connect("mongodb://localhost/staticData");
 var db = mongoose.connection;
+mongoClient.connect(url, function(err, db) {
+		if (err) throw err;
+		});
+
 
 var bcrypt = require('bcryptjs');
 var User = require('../models/user');
@@ -119,8 +123,112 @@ router.get('/logout', function(req, res){
 
 router.get('/settings', function(req, res){
 	//res.render('settings');
-	res.send(req.user.role);
+	if(req.user){
+		switch(req.user.role){
+		case "t":
+			db.collection("classes").findOne({"name":"classes"}, function(err, result) {
+			if (err) throw err;
+			res.render("tsettings", {allClasses: result.classes, tClasses: req.user.classes});
+			});
+			break;
+		case "a":
+			res.render("asettings");
+			break;
+		default:
+			res.send("your role is not specified in the db");
+			break;
+	};
+	}else{
+		res.send("your role is undefined or you are not logged in");
+	}
 	
+});
+router.post('/tsettings', function(req, res){
+	//res.send(req.body.time);
+	
+	if (req.user){
+		var time2= JSON.parse(req.body.time)
+		db.collection("userData").update(
+			{ email: req.user.email},
+			{ $set:
+				{
+				time:time2
+				}
+			}
+		, function(err, result) {
+		if (err) throw err;
+		});
+		req.flash("success_msg", "You have successfuly saved yout time table");
+		res.redirect("/");
+	}else{
+		req.flash("error_msg", "You r not loggged in");
+		res.redirect("/");
+	}
+		
+});
+router.post('/asettings', function(req, res){
+	//res.send(req.body.time);
+	if (req.user && req.user.role =="a"){
+		var classes2= JSON.parse(req.body.classes)
+		db.collection("classes").update(
+			{ name: "classes"},
+			{ $set:{
+				classes: classes2
+				   }},
+			{ upsert: true }
+		, function(err, result) {
+		if (err) throw err;
+		});
+		req.flash("success_msg", "You have successfuly saved classes");
+		res.redirect("/");
+	}else{
+		req.flash("error_msg", "You r not loggged in or not admin");
+		res.redirect("/");
+	}
+		
+});
+
+router.post('/tsettingsClasses', function(req, res){
+	//res.send(req.body.time);
+	
+	if (req.user && req.user.role=="t"){
+		var classes2= JSON.parse(req.body.classes)
+		db.collection("userData").update(
+			{ email: req.user.email},
+			{ $set:
+				{
+				classes:classes2
+				}
+			}
+		, function(err, result) {
+		if (err) throw err;
+		});
+		req.flash("success_msg", "You have successfuly saved yout time table");
+		res.redirect("/");
+	}else{
+		req.flash("error_msg", "You r not loggged in");
+		res.redirect("/");
+	}
+		
+});
+// 
+
+router.get('/test', function(req, res){
+	db.collection("classes").findOne({"name":"classes"}, function(err, result) {
+			if (err) throw err;	
+			res.render("asettings", {allClasses: result.classes});
+			});
+});
+
+router.get('/test/:className', function(req, res){
+	mongoClient.connect("mongodb://localhost/staticData", function(err, db) {
+    if (err) throw err;
+    db.collection("classes").findOne({"className":req.params.className}, function(err, result) {
+    if (err) throw err;
+    res.send(result);
+    db.close();
+    });
+	});
 });
 
 module.exports = router;
