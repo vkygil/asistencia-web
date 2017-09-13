@@ -1,0 +1,201 @@
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/jquery.serializejson.js"></script>
+<script>
+function addFields(day){
+var element = document.createElement("div");
+element.innerHTML = '<span>1a hora: </span><input type="text" name="'+day+'[]" placeholder="ej.: 8:00"> - <input type="text" name="'+day+'[]" placeholder="ej.: 8:45"> <select name="'+day+'[]"><option disabled selected value>select: </option>{{#each tClasses}}<option value="{{this}}">{{this}}</option>{{/each}}</select><br><br>';
+document.getElementById(day).appendChild(element)
+}
+
+function sendTime(){
+var sc = document.querySelectorAll("input[type=text]")
+for (isc=0; isc<sc.length; isc++){
+sc[isc].value= sc[isc].value.replace(":", "");
+}
+
+var space = document.getElementsByTagName("option")
+for (isp=0; isp<space.length; isp++){
+space[isp].value= space[isp].value.replace(/ /g, "_")
+}
+
+
+var form = $('#my-profile').serializeJSON();
+function chunk (arr, len) {
+  var chunks = [],
+      i = 0,
+      n = arr.length;
+  while (i < n) {
+    chunks.push(arr.slice(i, i += len));
+  }
+  return chunks;
+}
+var lunesObj = new Object();
+lunesObj.day=1;
+lunesObj.time= chunk(form.lunes,3);
+var martesObj = new Object();
+martesObj.day=2;
+martesObj.time= chunk(form.martes,3);
+var miercolesObj = new Object();
+miercolesObj.day=3;
+miercolesObj.time= chunk(form.miercoles,3);
+var juevesObj = new Object();
+juevesObj.day=4;
+juevesObj.time= chunk(form.jueves,3);
+var viernesObj = new Object();
+viernesObj.day=5;
+viernesObj.time= chunk(form.viernes,3);
+
+var time = [];
+time.push(lunesObj);
+time.push(martesObj);
+time.push(miercolesObj);
+time.push(juevesObj);
+time.push(viernesObj);
+
+for(ii=0; ii<5; ii++){
+for(iii=0; iii<time[ii].time.length; iii++){
+	time[ii].time[iii][0] = parseInt(time[ii].time[iii][0]);
+	time[ii].time[iii][1] = parseInt(time[ii].time[iii][1]);
+}
+}
+document.getElementById("timeInput").value = JSON.stringify(time);
+document.getElementById("sendForm").submit();
+}
+
+function sendClasses(){
+var classes = $('#classForm').find(':input').filter(function () {
+return $.trim(this.value).length > 0
+}).serializeJSON();
+
+document.getElementById("classesInput").value = JSON.stringify(classes.tClasses);
+document.getElementById("sendClasses").submit();
+}
+
+</script>
+
+
+<p>Seleciona tus classes:</p>
+<form id="classForm">
+{{#each allClasses}}
+<label class="form-check-label">
+      <input type="checkbox" name="tClasses[]" id="{{this}}" value="{{this}}" class="form-check-input">
+	  {{this}}<span>, </span><span> </span>
+</label>
+	
+{{/each}}
+</form>
+<form id="sendClasses" method="post" action="/users/tsettingsClasses">
+	<input type="button" class="btn btn-default" value="Save" onclick="sendClasses()">
+	<input type="hidden" id="classesInput" name="classes" value='unDefined' class="btn btn-default">
+</form>
+<br>
+
+
+<hr>
+
+<h2>Tu horario - </h2><label>(usa el formato de 24 horas)</label>
+<form id="my-profile" method="post" action="/users/settings">
+
+<p>Lunes<p>
+<div id="lunes">
+<div>
+<span>1a hora:</span>
+<input type="text" name="lunes[]" placeholder="ej.: 8:00"> -
+<input type="text" name="lunes[]" placeholder="ej.: 8:45">
+ <select name="lunes[]">
+	<option disabled selected value>select: </option>
+	{{#each tClasses}}
+	  <option value="{{this}}">{{this}}</option>
+	{{/each}}
+  </select><br><br>
+</div>
+</div>
+<input type="button" value="Add hour" class="btn btn-default" onclick="addFields('lunes')">
+<input type="button" value="Remove hour" class="btn btn-default" onclick='document.getElementById("lunes").removeChild(document.getElementById("lunes").lastChild)'><br><br>
+
+
+<p>martes<p>
+<div id="martes">
+<div>
+<span>1a hora:</span>
+<input type="text" name="martes[]" placeholder="ej.: 8:00"> -
+<input type="text" name="martes[]" placeholder="ej.: 8:45">
+ <select name="martes[]">
+	<option disabled selected value>select: </option>
+    {{#each tClasses}}
+	  <option value="{{this}}">{{this}}</option>
+	{{/each}}
+  </select><br><br>
+</div>
+</div>
+<input type="button" value="Add hour" class="btn btn-default" onclick="addFields('martes')">
+<input type="button" value="Remove hour" class="btn btn-default" onclick='document.getElementById("martes").removeChild(document.getElementById("martes").lastChild)'><br><br>
+
+<p>miercoles<p>
+<div id="miercoles">
+<div>
+<span>1a hora:</span>
+<input type="text" name="miercoles[]" placeholder="ej.: 8:00"> -
+<input type="text" name="miercoles[]" placeholder="ej.: 8:45">
+ <select name="miercoles[]">
+	<option disabled selected value>select: </option>
+    {{#each tClasses}}
+	  <option value="{{this}}">{{this}}</option>
+	{{/each}}
+  </select><br><br>
+</div>
+</div>
+<input type="button" value="Add hour" class="btn btn-default" onclick="addFields('miercoles')">
+<input type="button" value="Remove hour" class="btn btn-default" onclick='document.getElementById("miercoles").removeChild(document.getElementById("miercoles").lastChild)'><br><br>
+
+<p>jueves<p>
+<div id="jueves">
+<div>
+<span>1a hora:</span>
+<input type="text" name="jueves[]" placeholder="ej.: 8:00"> -
+<input type="text" name="jueves[]" placeholder="ej.: 8:45">
+ <select name="jueves[]">
+	<option disabled selected value>select: </option>
+    {{#each tClasses}}
+	  <option value="{{this}}">{{this}}</option>
+	{{/each}}
+  </select><br><br>
+</div>
+</div>
+<input type="button" value="Add hour" class="btn btn-default" onclick="addFields('jueves')">
+<input type="button" value="Remove hour" class="btn btn-default" onclick='document.getElementById("jueves").removeChild(document.getElementById("jueves").lastChild)'><br><br>
+
+
+<p>viernes<p>
+<div id="viernes">
+<div>
+<span>1a hora:</span>
+<input type="text" name="viernes[]" placeholder="ej.: 8:00"> -
+<input type="text" name="viernes[]" placeholder="ej.: 8:45">
+ <select name="viernes[]">
+	<option disabled selected value>select: </option>
+    {{#each tClasses}}
+	  <option value="{{this}}">{{this}}</option>
+	{{/each}}
+  </select><br><br>
+</div>
+</div>
+<input type="button" value="Add hour" class="btn btn-default" onclick="addFields('viernes')">
+<input type="button" value="Remove hour" class="btn btn-default" onclick='document.getElementById("viernes").removeChild(document.getElementById("viernes").lastChild)'><br><br>
+
+</form>
+
+<form id="sendForm" method="post" action="/users/tsettings">
+	<input type="button" class="btn btn-default" value="Save" onclick="sendTime()">
+	<input type="hidden" id="timeInput" name="time" value='unDefined' class="btn btn-default">
+</form>
+
+<hr>
+
+
+<script>
+var a = "{{tClasses}}".split(",");
+for (i = 0; i < a.length; i++) { 
+   document.getElementById(a[i]).checked = true;
+}
+</script>

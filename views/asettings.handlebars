@@ -1,0 +1,103 @@
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/jquery.serializejson.js"></script>
+<script type="text/javascript" src="/js/bootstrap.js"></script>
+<script>
+function sendClasses(){
+	var classes = document.getElementById("classes").value.split(", ");
+	document.getElementById("classesInput").value = JSON.stringify(classes);
+	document.getElementById("sendForm").submit();
+}
+
+</script>
+
+
+<form id="my-profile" method="post">
+<p>Write class names, separated with commas:</p>
+<textarea id="classes" name="classes" rows="6" cols="50">{{#each allClasses}}{{this}}, {{/each}}</textarea>
+</form>
+<form id="sendForm" method="post" action="/users/asettings">
+	<input type="button" class="btn btn-default" value="Save" onclick="sendClasses()">
+	<input type="hidden" id="classesInput" name="classes" value='unDefined' class="btn btn-default">
+</form>
+<hr>
+
+{{cns}}
+<script>
+var a = "{{allClasses}}".split(",");
+</script>
+
+<div class="classStudents">
+
+<style>
+/* Style the tab */
+div.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+div.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+div.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+div.tab button.active {
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+</style>
+</head>
+<body>
+
+<p>Click on the buttons inside the tabbed menu:</p>
+
+<div class="tab">
+	{{#each allClasses}}
+	  <button class="tablinks" onclick="openCity(event, '{{this}}')">{{this}}</button>
+	{{/each}}
+</div>
+
+{{#each allClasses}}
+	  <div id="{{this}}" class="tabcontent">
+	  <h3>{{this}}</h3>
+	  <p>{{this}} is the capital city of England.</p>
+	  </div>
+{{/each}}
+
+<script>
+function openCity(evt, cityName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+</script>
+
+</div>
