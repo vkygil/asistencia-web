@@ -132,17 +132,51 @@ router.get('/settings', function(req, res){
 			});
 			break;
 		case "a":
-			res.render("asettings");
+			db.collection("classes").findOne({"name":"classes"}, function(err, result) {
+			if (err) throw err;	
+			res.render("asettings", {allClasses: result.classes});
+			});
 			break;
 		default:
 			res.send("your role is not specified in the db");
 			break;
 	};
 	}else{
-		res.send("your role is undefined or you are not logged in");
+		req.flash("error_msg", "You r not loggged in");
+		res.redirect("/users/login");
 	}
 	
 });
+
+router.get('/settings/:className', function(req, res){
+	mongoClient.connect("mongodb://localhost/staticData", function(err, db) {
+    if (err) throw err;
+    db.collection("classes").findOne({"className":req.params.className}, function(err, result) {
+    if (err) throw err;
+    res.send(result);
+    db.close();
+    });
+	});
+});
+
+router.post("/settings", function(req, res){
+	mongoClient.connect("mongodb://localhost/staticData", function(err, db) {
+    if (err) throw err;
+    db.collection("classes").update(
+			{ className: req.body.className},
+			{ $set:
+				{
+				students:req.body.studentNames
+				}
+			},{ upsert: true }
+		, function(err, result) {
+		if (err) throw err;
+		res.send("done")
+		});
+	});
+	
+});
+
 router.post('/tsettings', function(req, res){
 	//res.send(req.body.time);
 	
@@ -214,22 +248,14 @@ router.post('/tsettingsClasses', function(req, res){
 // 
 
 router.get('/test', function(req, res){
-	db.collection("classes").findOne({"name":"classes"}, function(err, result) {
-			if (err) throw err;	
-			res.render("asettings", {allClasses: result.classes});
-			});
+	res.send("deb");
 });
 
-router.get('/test/:className', function(req, res){
-	mongoClient.connect("mongodb://localhost/staticData", function(err, db) {
-    if (err) throw err;
-    db.collection("classes").findOne({"className":req.params.className}, function(err, result) {
-    if (err) throw err;
-    res.send(result);
-    db.close();
-    });
-	});
-});
+
+
+
 
 module.exports = router;
+
+
 

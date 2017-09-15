@@ -80,7 +80,8 @@ div.tab button.active {
 {{#each allClasses}}
 	  <div id="{{this}}" class="tabcontent">
 	  <h3>{{this}}</h3>
-	  <p>{{this}} is the capital city of England.</p>
+	  <textarea></textarea><br>
+	  <input class="btn" value="submit" type="button" onclick="submitStudents(this)">
 	  </div>
 {{/each}}
 
@@ -98,12 +99,26 @@ function openCity(evt, className) {
     document.getElementById(className).style.display = "block";
     evt.currentTarget.className += " active";
 	$.ajax({
-		url: "/users/test/"+className,
+		url: "/users/settings/"+className,
 		contentType: "application/json",
 		success: function(response){
-		console.log(response);
+			document.getElementById(className).getElementsByTagName('textarea')[0].value = response.students.join("\n");
+			document.getElementById(className).getElementsByTagName('textarea')[0].style.height= (2+ document.getElementById(className).getElementsByTagName('textarea')[0].scrollHeight)+"px";
 		}
 	});
+}
+function submitStudents(button){
+//console.log(button.parentNode.childNodes[3].value.split('\n'))
+$.ajax({
+	url: "/users/settings",
+	method: "POST",
+	contentType: "application/json",
+	data: JSON.stringify({className:button.parentNode.id ,studentNames:button.parentNode.childNodes[3].value.split('\n') }),
+	success: function(response){
+		console.log(response)
+		button.classList.add("btn-success")
+	}
+});
 }
 
 </script>

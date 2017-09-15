@@ -1,5 +1,8 @@
 var express = require('express');
 var router = express.Router();
+var mongo = require("mongodb");
+var http = require("http");
+var mongoClient = require("mongodb").MongoClient;
 
 // Get Homepage
 router.get('/', function(req, res){
@@ -26,7 +29,8 @@ router.get('/', function(req, res){
 			
 			break;
 		case "a":
-			res.render("asettings");
+			req.flash("success_msg", "admin dashboard not available");
+			res.redirect("/users/settings");
 			break;
 		default:
 			res.send("your role is not specified in the db");
