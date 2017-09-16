@@ -122,5 +122,34 @@ $.ajax({
 }
 
 </script>
-
 </div>
+<br><hr>
+
+<div id="userData">
+<h2>Los usuarios:</h2>
+
+	{{#each userData}}
+	<div>
+		Nombre:{{this.name}}, Email:{{this.email}}, role:{{this.role}} <input class="btn-default" type="button" onClick='deleteUser(this, "{{this.email}}")' value="Eliminar Usuario">
+	</div>
+	{{/each}}
+	<input class="btn-default" type="button" value="Anadir usuario" onClick="window.location.href='/users/register'">
+</div>
+<script>
+function deleteUser(button, email){
+if (confirm("Eliminar a "+email+"?")){
+	$.ajax({
+	url: "/users/deleteUser",
+	method: "POST",
+	contentType: "application/json",
+	data: JSON.stringify({email: email}),
+	success: function(response){
+		console.log(response)
+		button.parentNode.remove()
+	}})
+	}else {
+	console.log("y not")
+}
+
+}
+</script>

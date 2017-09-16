@@ -133,8 +133,15 @@ router.get('/settings', function(req, res){
 			break;
 		case "a":
 			db.collection("classes").findOne({"name":"classes"}, function(err, result) {
-			if (err) throw err;	
-			res.render("asettings", {allClasses: result.classes});
+			if (err) throw err;
+				mongoClient.connect(url, function(err, db) {
+				if (err) throw err;
+				db.collection("userData").find({}, {'_id': 0,name:true,email:true,role:true	}).toArray(function(err, userData){
+				if (err) throw err;
+				res.render("asettings", {userData:userData,json:JSON.stringify(userData), allClasses: result.classes});
+				db.close();
+				})
+				});
 			});
 			break;
 		default:
@@ -245,10 +252,25 @@ router.post('/tsettingsClasses', function(req, res){
 	}
 		
 });
-// 
+
+router.post('/deleteUser', function(req, res){
+	
+	if (req.user){
+		db.collection("userData").findOneAndDelete( { email:req.body.email}, function(err, result) {
+		if (err) throw err;
+		res.send(result);
+	});
+	}else{
+	}
+		
+});
 
 router.get('/test', function(req, res){
-	res.send("deb");
+			db.collection("userData").find({}, {'_id': 0,name:true,email:true,role:true	}).toArray(function(err, userData){
+			if (err) throw err;
+			//res.send(""+JSON.stringify(userData))
+			res.render("asettings", {userData:userData,json:JSON.stringify(userData)});
+			})
 });
 
 
