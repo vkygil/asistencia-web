@@ -11,7 +11,7 @@
 
 <div>
 <a href="javascript:toggle02('class1')">Classnamw</a>
-<input onclick="toggle(this)" value="classname" type="button">
+<input class="btn" onclick="toggle(this)" value="classname" type="button">
 <div id="class1" style="display: none"><p>peek-a-boo</p></div>
 </div>
 
@@ -53,7 +53,7 @@ function toggle(button) {
 	}
 }
 function toggle02(button) {
-	var content = button.nextElementSibling
+	var content = document.getElementById(button);
 	if(content.style.display == "block") {
     		content.style.display = "none";
   	}
