@@ -55,3 +55,14 @@ var c2 = result.classes.slice(-Math.abs(cn2));
     db.close();
     });
 	});
+	
+	
+mongoClient.connect("mongodb://localhost/"+new Date().getFullYear(), function(err, db) {
+					if (err) throw err;
+					db.collection(tTable[i][2]).insert({"day":"@.com"}, function(err, result) {
+					if (err) throw err;
+					res.render("template", {name: result});
+					db.close();
+					});
+					});
+					i=tTable.length;

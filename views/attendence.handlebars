@@ -1,0 +1,64 @@
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<p>Escoje la fecha:<p>
+
+<div id="form01">
+<input id="dateInput" type="date">
+<input type="button" value="buscar" onClick="getDayAtt(this)">
+</div><br>
+
+
+<div>
+<a href="javascript:toggle02('class1')">Classnamw</a>
+<input onclick="toggle(this)" value="classname" type="button">
+<div id="class1" style="display: none"><p>peek-a-boo</p></div>
+</div>
+
+<script>
+document.getElementById("dateInput").valueAsDate = new Date();
+var div02 = document.getElementById("div02");
+var text02 = document.createElement("p");
+
+function getDayAtt(){
+//document.getElementById("dateInput").valueAsDate.getDay();
+d=[6,0,1,2,3,4,5][document.getElementById("dateInput").valueAsDate.getDay()]
+
+if (d==5 || d==6){
+	alert("Los dias de fin de semana no se pueden seleccionar")
+} else {
+	$.ajax({
+		url: "/users/attendence",
+		method: "POST",
+		contentType: "application/json",
+		data: JSON.stringify({day:d}),
+		success: function(response){
+			//console.log(response)
+			for (i=0;i<response.length;i++){
+				text02.innerHTML = response[i][0]+" - "+response[i][1]+": "+response[i][2].replace(/_/g," ");
+				div02.appendChild(text02)
+			}
+		}
+	});
+}
+}
+
+function toggle(button) {
+	var content = button.nextElementSibling
+	if(content.style.display == "block") {
+    		content.style.display = "none";
+  	}
+	else {
+		content.style.display = "block";
+	}
+}
+function toggle02(button) {
+	var content = button.nextElementSibling
+	if(content.style.display == "block") {
+    		content.style.display = "none";
+  	}
+	else {
+		content.style.display = "block";
+	}
+}
+</script>
