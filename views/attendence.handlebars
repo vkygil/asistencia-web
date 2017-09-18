@@ -8,11 +8,15 @@
 <input type="button" value="buscar" onClick="getDayAtt(this)">
 </div><br>
 
+<div id="allClasses">
 
-<div>
-<a href="javascript:toggle02('class1')">Classnamw</a>
-<input class="btn" onclick="toggle(this)" value="classname" type="button">
-<div id="class1" style="display: none"><p>peek-a-boo</p></div>
+<div class="card">
+<a class="card-header" href="javascript:toggle('class1')">11:00-13:15     Classname </a>
+<div id="class1" style="display: none">
+<p>peek-a-boo</p>
+</div>
+</div>
+
 </div>
 
 <script>
@@ -33,26 +37,44 @@ if (d==5 || d==6){
 		contentType: "application/json",
 		data: JSON.stringify({day:d}),
 		success: function(response){
-			//console.log(response)
+			console.log(response)
+			var a = response;
+			
+			var allClassesId = document.createElement("div");
+			allClassesId.className = "card";
+			
+			var toggle = document.createElement("a");
+			toggle.className = "card-header";
+			toggle.setAttribute("href", "javascript:toggle('class1')");
+			toggle.innerHTML = text02; 
+			
+			var allClassesId = document.createElement("div");
+			allClassesId.className = "class1";
+			allClassesId.style.display = "none";
+			
+			var p1 = document.createElement("p");
+			var t2 = document.createTextNode("peek-a-chu");
+			
+			
 			for (i=0;i<response.length;i++){
-				text02.innerHTML = response[i][0]+" - "+response[i][1]+": "+response[i][2].replace(/_/g," ");
-				div02.appendChild(text02)
+				var d1=response[i][0]+"";
+				var cut1=d1.length-2;
+				var d2=response[i][1]+"";
+				var cut2=d2.length-2;
+				
+				text02.innerHTML = d1.slice(0,cut1)+":"+d1.slice(cut1,d1.length)+" - "+d2.slice(0,cut2)+"  "+d2.slice(cut2,d2.length)+" - "+response[i][2].replace(/_/g," ");
+				console.log(text02);
+				
+				
+				console.log(div03)
 			}
 		}
 	});
 }
 }
 
+
 function toggle(button) {
-	var content = button.nextElementSibling
-	if(content.style.display == "block") {
-    		content.style.display = "none";
-  	}
-	else {
-		content.style.display = "block";
-	}
-}
-function toggle02(button) {
 	var content = document.getElementById(button);
 	if(content.style.display == "block") {
     		content.style.display = "none";
